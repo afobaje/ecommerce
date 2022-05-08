@@ -1,16 +1,21 @@
 import React from "react";
-// import Img from "./assets/arno-senoner-oCXVxwTFwqE-unsplash.jpg";
-// import { useState, useEffect } from "react";
-// import axios from "axios";
+import { useEffect } from "react";
 import "../App.css";
 import { Link } from "react-router-dom";
-// import Description from "./Description";
+import { useContext } from "react";
+import { Universal } from "./global";
 
-const Products = ({ img, name, price, id }) => {
+const Products = ({ img, name, price, id, item = 1 }) => {
+  let universal = useContext(Universal);
+
+  const handler = () => {
+    universal.setVal([...universal.val, { id, img, name, price, item }]);
+  };
+
   return (
     <>
       <Link
-        to={`/Description/${id}`}
+        to={`/Product/${id}`}
         style={{
           textDecoration: "none",
           color: "#000",
@@ -25,14 +30,14 @@ const Products = ({ img, name, price, id }) => {
             justifyContent: "flex-start",
             alignItems: "flex-start",
             padding: ".6em",
-            
           }}
+          // onClick={()=>handler()}
         >
           <div
             style={{
               maxWidth: "auto",
               maxHeight: "70%",
-              objectFit: "contain",
+              objectFit: "cover",
             }}
           >
             <img
@@ -59,10 +64,10 @@ const Products = ({ img, name, price, id }) => {
                 fontWeight: "500",
               }}
             >
-              ${new Intl.NumberFormat().format(price)}
+              ₦{new Intl.NumberFormat().format(price)}
             </p>
             <Link
-              to={`/Description/${id}`}
+              to={`/Product/${id}`}
               style={{
                 justifyContent: "center",
                 alignSelf: "center",
@@ -73,6 +78,7 @@ const Products = ({ img, name, price, id }) => {
                 color: "#000",
                 borderRadius: "5px",
               }}
+              onClick={() => handler()}
             >
               ADD TO CART
             </Link>

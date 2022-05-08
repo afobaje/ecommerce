@@ -1,17 +1,17 @@
 import axios from "axios";
 import "../App.css";
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect } from "react";
+
 import { createApi } from "unsplash-js";
+import { Universal } from "./global";
 
 const AddProduct = () => {
   const [img, setImg] = useState([]);
-  const [loading,setLoading]=useState('')
-  const [clicked,setClicked]=useState(false)
-  // const [imglink, setImgLink] = useState("");
-  // const [desc, setDesc] = useState("");
-  // const [price, setPrice] = useState("");
-  // const [name, setName] = useState("");
+  const [loading, setLoading] = useState("");
+  const [clicked, setClicked] = useState(false);
+ 
+  const { show, setShow } = useContext(Universal);
 
   const [details, setDetails] = useState({
     imgUrl: [],
@@ -46,13 +46,12 @@ const AddProduct = () => {
   };
 
   const Imghandler = (e) => {
-   
     let a = e.target.src;
     let b = [];
     b.push(a);
     // e.target.style.border = "4px solid green";
-    e.target.style.border = `${clicked ? "4px solid green":""}`;
-    
+    e.target.style.border = `${clicked ? "4px solid green" : ""}`;
+
     setDetails({
       ...details,
       imgUrl: [...details.imgUrl, ...b],
@@ -64,7 +63,7 @@ const AddProduct = () => {
     // })
 
     console.log(c);
-    setClicked(!clicked)
+    setClicked(!clicked);
   };
 
   const unsplash = createApi({
@@ -72,25 +71,35 @@ const AddProduct = () => {
   });
 
   const addProduct = () => {
-    setLoading(true)
-    return axios
-      .post(`http://localhost:3000/Products`, {
-        name: details.name,
-        price: details.price,
-        image: details.imgUrl,
-        desc: details.desc,
-      })
-      .then((res) => {
-        setLoading(false)
-        console.log("posted an item", res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    setLoading(true);
+
+    if (details.name !== "" && details.imgUrl.length !== 0 && details.price !== "") {
+       axios
+        .post(`http://localhost:3000/Products`, {
+          name: details.name,
+          price: details.price,
+          image: details.imgUrl,
+          desc: details.desc,
+        })
+        .then((res) => {
+          setLoading(false);
+    
+          // console.log("posted an item", res);
+          setShow(!show);
+          
+          
+        })
+        .catch((err) => {
+          // console.log(err);
+        });
+    } else if (details.name == "" &&details.imgUrl.length==0&&details.price=='') {
+      alert("please fill up");
+    }
+    
+   
   };
 
   useEffect(() => {
-    
     unsplash.search
       .getPhotos({ query: details.name, orientation: "landscape" })
       .then((result) => {
@@ -102,7 +111,6 @@ const AddProduct = () => {
       });
   }, [details.name]);
 
-  // console.log(details);
   return (
     <>
       <div
@@ -110,7 +118,7 @@ const AddProduct = () => {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(2,1fr)",
-          width: "100%",
+          maxWidth: "80%",
         }}
       >
         <div
@@ -134,7 +142,7 @@ const AddProduct = () => {
               border: "1px solid black",
             }}
           >
-            <form action="" method="POST">
+            <form action="" method="POST" onSubmit={() => addProduct()}>
               <label htmlFor="product-name">Name</label>
               <input
                 type="text"
@@ -152,6 +160,7 @@ const AddProduct = () => {
                 }}
                 name="product-name"
                 placeholder="Product Name"
+                required
               />
               <label htmlFor="product-desc">Desc</label>
               <input
@@ -170,6 +179,7 @@ const AddProduct = () => {
                   border: "1px solid black",
                   padding: "1em",
                 }}
+                required
               />
               <label htmlFor="product-price">price</label>
               <input
@@ -187,6 +197,7 @@ const AddProduct = () => {
                 onChange={(e) => {
                   catalogue(e);
                 }}
+                required
               />
 
               <input
@@ -214,6 +225,8 @@ const AddProduct = () => {
           className="inp-search"
           style={{
             padding: "1em",
+            objectFit: "cover",
+            gridTemplateColumns: "span",
           }}
         >
           <div
@@ -222,6 +235,7 @@ const AddProduct = () => {
               gridTemplateColumns: "repeat(2,1fr)",
               gridGap: ".5em",
               height: "100vh",
+              objectFit: "cover",
               overflow: "auto",
               // padding:'.5em'
             }}
@@ -229,7 +243,12 @@ const AddProduct = () => {
             {img &&
               img.map((val, i) => {
                 return (
-                  <div key={i}>
+                  <div
+                    key={i}
+                    style={{
+                      objectFit: "cover",
+                    }}
+                  >
                     <img
                       src={val.urls.small}
                       alt={val.alt_description}

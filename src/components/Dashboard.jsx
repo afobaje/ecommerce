@@ -1,32 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../App.css";
-import axios from "axios";
-import { useState, useEffect } from "react";
 
-const Dashboard = () => {
-  const [products, setProducts] = useState([]);
+import Stocklist from "./Stocklist";
+import AddProduct from "./AddProduct";
+import { useState } from "react";
+import { Universal } from "./global";
+import { Link } from "react-router-dom";
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:3000/Products`)
-      .then((res) => {
-        setProducts(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
-
-  const DelProduct = ({ id }) => {
-    axios
-      .delete(`http://localhost:3000/Products/${id}`)
-      .then(() => {
-        console.log("delete successful");
-      })
-      .catch((err) => {
-        console.log(err, "delete failed");
-      });
-  };
+const Admin = () => {
+  const { show, setShow } = useContext(Universal);
+  console.log(show);
 
   return (
     <div>
@@ -34,11 +17,8 @@ const Dashboard = () => {
         className="panel-body"
         style={{
           display: "flex",
-          // display:'grid',
-          // gridTemplateColumns:'repeat(2,1fr)',
           height: "100vh",
           width: "100%",
-
           overflow: "none",
         }}
       >
@@ -54,16 +34,16 @@ const Dashboard = () => {
             className="fixed"
             style={{
               backgroundColor: "rgb(251, 251, 251)",
-              width:'17%',
+              width: "17%",
               // padding:0,
-              height:'100vh',
+              height: "100vh",
               position: "fixed",
             }}
           >
             <div
               style={{
                 display: "flex",
-                padding:'.5em'
+                padding: ".5em",
               }}
             >
               <div
@@ -89,7 +69,12 @@ const Dashboard = () => {
                     fontWeight: "600",
                   }}
                 >
-                  Shopify
+                  <Link to="/"
+                  style={{
+                    textDecoration:'none',
+                    color:'black'
+                  }}
+                  >Shopify</Link>
                 </span>
                 <span
                   style={{
@@ -158,7 +143,43 @@ const Dashboard = () => {
             </ul>
           </div>
         </div>
-        <div
+
+        {show ? <AddProduct /> : <Stocklist />}
+      </div>
+    </div>
+  );
+};
+
+export default Admin;
+
+// const [products, setProducts] = useState([]);
+
+// useEffect(() => {
+//   axios
+//     .get(`http://localhost:3000/Products`)
+//     .then((res) => {
+//       setProducts(res.data);
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//     });
+// }, []);
+
+// const DelProduct = ({ id }) => {
+//   axios
+//     .delete(`http://localhost:3000/Products/${id}`)
+//     .then(() => {
+//       console.log("delete successful");
+//     })
+//     .catch((err) => {
+//       console.log(err, "delete failed");
+//     });
+//   let productid = id;
+//   setProducts(products.filter((ide) => ide.id !== productid));
+// };
+
+{
+  /* <div
           className="table-body"
           style={{
             maxWidth: "80%",
@@ -336,7 +357,7 @@ const Dashboard = () => {
             <thead>
               {products.map(({ name, desc, price, id, image }) => {
                 return (
-                  <tr key={id} >
+                  <tr key={id}>
                     <td>
                       <input type="checkbox" name="" id="" />
                     </td>
@@ -384,10 +405,5 @@ const Dashboard = () => {
               })}
             </thead>
           </table>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default Dashboard;
+        </div> */
+}

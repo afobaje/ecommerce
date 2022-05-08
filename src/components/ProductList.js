@@ -11,7 +11,7 @@ const ProductList = () => {
   useEffect(()=>{
     axios.get(`http://localhost:3000/Products`)
     .then(res=>{
-      console.log('another one',res.data)
+      // console.log('another one',res.data)
       setProducts(res.data)
     })
   },[])

@@ -4,6 +4,7 @@ import Image from "./assets/photo-1645143151541-f78e21cae1e1-removebg-preview.pn
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "../App.css";
+import Layout from "./Layout";
 
 const Cart = () => {
   const [product, setProduct] = useState([]);
@@ -19,6 +20,7 @@ const Cart = () => {
 
   return (
     <>
+    <Layout>
       <div
         className="cart-body"
         style={{
@@ -33,85 +35,7 @@ const Cart = () => {
             flexDirection: "column",
             padding: ".5em",
           }}
-        >
-          <nav
-            style={{
-              display: "flex",
-              flexDirection: "row",
-            }}
-          >
-            <span
-              style={{
-                width: "20%",
-                padding: ".5em",
-                marginTop: "-1.5em",
-              }}
-            >
-              <h2>Shopify</h2>
-            </span>
-            <span
-              style={{
-                width: "30%",
-                // padding:'.5em'
-              }}
-            >
-              <input
-                type="search"
-                name=""
-                id=""
-                style={{
-                  width: "100%",
-                  padding: "1em",
-                  marginTop: "1em",
-                  borderRadius: "5px",
-                  border: "1px solid gray",
-                }}
-              />
-            </span>
-            <ul
-              style={{
-                display: "flex",
-                listStyleType: "none",
-                justifyContent: "space-evenly",
-                width: "50%",
-              }}
-            >
-              <li>
-                <a
-                  href="#"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                >
-                  BEST SELLERS
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                >
-                  ALL UNDER 30s
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                  }}
-                >
-                  SIGN UP
-                </a>
-              </li>
-              <li>ADD TO CART</li>
-            </ul>
-          </nav>
+        >          
           <div
             className="adsection"
             style={{
@@ -177,7 +101,7 @@ const Cart = () => {
                   backgroundColor: "#a9dee3",
                   width: "80%",
                   height: "30em",
-                  borderRadius: "30px",
+                  borderRadius: "35px",
                   position: "relative",
                 }}
               ></div>
@@ -200,6 +124,7 @@ const Cart = () => {
             </div>
           </div>
         </header>
+
         <div className="mainbody">
           <div
             className="new"
@@ -221,57 +146,14 @@ const Cart = () => {
               {product &&
                 product.map(({ name, image, price, id }) => {
                   return (
-                    <Products name={name} id={id} img={image} price={price} />
+                    <Products name={name} id={id} img={image} price={price} key={id.toString()} />
                   );
                 })}
             </div>
           </div>
-          <footer>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-              }}
-            >
-              <ul
-                style={{
-                  listStyleType: "none",
-                }}
-              >
-                <h2>Company</h2>
-                <li>about us</li>
-                <li>Join us</li>
-                <li>faq</li>
-              </ul>
-              <ul
-                style={{
-                  listStyleType: "none",
-                }}
-              >
-                <h2>Product</h2>
-                <li>android</li>
-                <li>ios</li>
-              </ul>
-            </div>
-            <p
-              style={{
-                textAlign: "center",
-              }}
-            >
-              Made with love by{" "}
-              <a
-                href="http://twitter.com/afobaje_"
-                style={{
-                  textDecoration: "none",
-                  color: "rgb(169,222,227)",
-                }}
-              >
-                Afobaje
-              </a>
-            </p>
-          </footer>
         </div>
       </div>
+      </Layout>
     </>
   );
 };
